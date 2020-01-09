@@ -1,5 +1,6 @@
 package com.mo16.recipes4demo.commands;
 
+import com.mo16.recipes4demo.model.Ingredient;
 import com.mo16.recipes4demo.model.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,5 +31,23 @@ class RecipeCommandTest {
         Recipe recipe = recipeCommand.toRecipe();
         assert id.equals(recipe.getId());
         assert id.equals(recipe.getIngredients().get(0).getId());
+    }
+
+    @Test
+    void fromRecipe(){
+        Long id = 1L;
+        Ingredient ingredient1 = Ingredient.builder().id(id).build();
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ingredient1);
+
+        Recipe recipe = Recipe.builder()
+                .id(id)
+                .description("recipe")
+                .cookTime(10L)
+                .build();
+        recipe.addIngredient(ingredient1);
+        RecipeCommand recipeCommand = RecipeCommand.fromRecipe(recipe);
+        assert id.equals(recipeCommand.getId());
+        assert id.equals(recipeCommand.getIngredients().get(0).getId());
     }
 }

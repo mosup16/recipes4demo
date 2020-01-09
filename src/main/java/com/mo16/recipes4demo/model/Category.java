@@ -23,4 +23,9 @@ public class Category {
         if (recipes == null) recipes = new ArrayList<>();
         return recipes;
     }
+
+    public void addRecipe(Recipe recipe){
+        recipe.getCategories().add(this);
+        getRecipes().add(recipe);
+    }
 }

@@ -16,4 +16,8 @@ public class UnitOfMeasureCommand {
         UnitOfMeasure uom = new UnitOfMeasure(id ,name);
         return uom;
     }
+
+    public static UnitOfMeasureCommand fromUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        return null;
+    }
 }

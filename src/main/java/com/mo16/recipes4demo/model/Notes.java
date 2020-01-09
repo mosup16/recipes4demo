@@ -1,5 +1,6 @@
 package com.mo16.recipes4demo.model;
 
+import com.mo16.recipes4demo.commands.NotesCommand;
 import lombok.*;
 
 import javax.persistence.*;

@@ -25,9 +25,9 @@ public class RecipeCommand {
     private String direction;
     private Byte[] image;
     private NotesCommand notes;
-    private List<IngredientCommand> ingredients = new ArrayList<>();
+    private List<IngredientCommand> ingredients;
     private Difficulty difficulty;
-    private List<CategoryCommand> categories = new ArrayList<>();
+    private List<CategoryCommand> categories;
 
     public List<IngredientCommand> getIngredients(){
         if (ingredients == null) {
@@ -43,6 +43,16 @@ public class RecipeCommand {
         return categories;
     }
 
+    public void addIngredient(IngredientCommand ingredient) {
+        ingredient.setRecipe(this);
+        getIngredients().add(ingredient);
+    }
+
+    public void addCategory(CategoryCommand category) {
+        category.getRecipes().add(this);
+        getCategories().add(category);
+    }
+
     public Recipe toRecipe() {
         List<Ingredient> ingredientsList = new ArrayList<>();
         getIngredients().forEach(ingredientCommand -> {
@@ -56,6 +66,24 @@ public class RecipeCommand {
         Recipe recipe = new Recipe(id, description, prepTime, cookTime, servings, source, url, direction, image,
                 (this.notes == null ? null : notes.toNotes()), ingredientsList, difficulty, categoriesList);
         return recipe;
+    }
+
+    public static RecipeCommand fromRecipe(Recipe recipe){
+        List<IngredientCommand> ingredientsList = new ArrayList<>();
+        recipe.getIngredients().forEach(ingredient -> {
+            ingredientsList.add(IngredientCommand.fromIngredient(ingredient));
+        });
+        List<CategoryCommand> categoriesList = new ArrayList<>();
+        recipe.getCategories().forEach(category -> {
+            categoriesList.add(CategoryCommand.fromCategory(category));
+        });
+
+        RecipeCommand recipeCommand = new RecipeCommand(recipe.getId(), recipe.getDescription()
+                , recipe.getPrepTime(), recipe.getCookTime(), recipe.getServings(), recipe.getSource()
+                , recipe.getUrl(), recipe.getDirection(), recipe.getImage(),
+                (recipe.getNotes() == null ? null : NotesCommand.fromNotes(recipe.getNotes()))
+                , ingredientsList, recipe.getDifficulty(), categoriesList);
+        return recipeCommand;
     }
 
 }

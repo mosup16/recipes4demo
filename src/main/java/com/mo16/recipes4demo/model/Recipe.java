@@ -1,7 +1,10 @@
 package com.mo16.recipes4demo.model;
 
 import com.mo16.recipes4demo.model.enums.Difficulty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class Recipe {
     @ManyToMany
     @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories ;
+    private List<Category> categories;
 
     public List<Ingredient> getIngredients() {
         if (ingredients == null) ingredients = new ArrayList<>();
@@ -45,5 +48,15 @@ public class Recipe {
     public List<Category> getCategories() {
         if (categories == null) categories = new ArrayList<>();
         return categories;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        getIngredients().add(ingredient);
+    }
+
+    public void addCategory(Category category) {
+        category.getRecipes().add(this);
+        getCategories().add(category);
     }
 }
