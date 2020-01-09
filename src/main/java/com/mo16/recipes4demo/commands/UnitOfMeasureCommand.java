@@ -13,12 +13,11 @@ public class UnitOfMeasureCommand {
     private String name;
 
     public UnitOfMeasure toUnitOfMeasure() {
-        UnitOfMeasure uom = new UnitOfMeasure(id ,name);
-        return uom;
+        return new UnitOfMeasure(id, name);
     }
 
     public static UnitOfMeasureCommand fromUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
-        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand(unitOfMeasure.getId(), unitOfMeasure.getName());
-        return unitOfMeasureCommand;
+        if (unitOfMeasure == null) return null;
+        return new UnitOfMeasureCommand(unitOfMeasure.getId(), unitOfMeasure.getName());
     }
 }

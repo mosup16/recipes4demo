@@ -35,7 +35,9 @@
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
                                     <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.getDescription()}">cat three</li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">cat
+                                        three
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -51,7 +53,7 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.difficulty}">Easy</p>
+                                <p th:text="${recipe.difficulty?.toString()}">Easy</p>
                             </div>
                         </div>
                         <div class="row">

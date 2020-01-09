@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 
 @Slf4j
 @Controller
@@ -48,11 +46,19 @@ public class RecipesController {
         return "redirect:/recipes/show/" + savedRecipe.getId();
     }
 
-    @RequestMapping("recipes/{id}")
+    @RequestMapping("/recipes/update/{id}")
     public String UpdateRecipe(@PathVariable String id ,Model model){
         Recipe recipe = recipeRepository.findById(Long.valueOf(id)).orElse(null);
-        RecipeCommand recipeCommand = RecipeCommand.builder().id(recipe.getId()).build();
+        RecipeCommand recipeCommand = RecipeCommand.fromRecipe(recipe);
         model.addAttribute("recipe" , recipeCommand);
         return "recipes/recipeform";
+    }
+
+
+    @RequestMapping("/recipes/delete/{id}")
+    public String deleteRecipe(@PathVariable String id) {
+        recipeRepository.deleteById(Long.valueOf(id));
+        log.info("Delete recipe id = " + id);
+        return "redirect:/";
     }
 }

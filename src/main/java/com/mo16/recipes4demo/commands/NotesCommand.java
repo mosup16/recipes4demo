@@ -10,19 +10,14 @@ import lombok.*;
 @Builder
 public class NotesCommand {
     private Long id;
-    //    private RecipeCommand recipe;
     private String recipeNotes;
 
     public Notes toNotes() {
-//        Recipe recipe = this.recipe == null ? null : this.recipe.toRecipe();
-        Notes notes = new Notes(id, null, recipeNotes);
-        return notes;
+        return new Notes(id, null, recipeNotes);
     }
 
     public static NotesCommand fromNotes(Notes notes) {
-//        Recipe recipe = notes.getRecipe();
-//        RecipeCommand recipeCommand = recipe == null ? null : RecipeCommand.fromRecipe(recipe);
-        NotesCommand notesCommand = new NotesCommand(notes.getId(), notes.getRecipeNotes());
-        return notesCommand;
+        if (notes == null) return null;
+        return new NotesCommand(notes.getId(), notes.getRecipeNotes());
     }
 }

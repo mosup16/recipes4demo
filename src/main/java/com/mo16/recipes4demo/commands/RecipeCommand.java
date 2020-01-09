@@ -44,12 +44,10 @@ public class RecipeCommand {
     }
 
     public void addIngredient(IngredientCommand ingredient) {
-//        ingredient.setRecipe(this);
         getIngredients().add(ingredient);
     }
 
     public void addCategory(CategoryCommand category) {
-//        category.getRecipes().add(this);
         getCategories().add(category);
     }
 
@@ -69,19 +67,22 @@ public class RecipeCommand {
     }
 
     public static RecipeCommand fromRecipe(Recipe recipe){
+        if (recipe == null) return null;
         List<IngredientCommand> ingredientsList = new ArrayList<>();
-        recipe.getIngredients().forEach(ingredient -> {
-            ingredientsList.add(IngredientCommand.fromIngredient(ingredient));
-        });
+        if (recipe.getIngredients() != null) {
+            recipe.getIngredients().forEach(ingredient -> {
+                ingredientsList.add(IngredientCommand.fromIngredient(ingredient));
+            });
+        }
         List<CategoryCommand> categoriesList = new ArrayList<>();
         recipe.getCategories().forEach(category -> {
             categoriesList.add(CategoryCommand.fromCategory(category));
         });
 
+        NotesCommand notesCommand = recipe.getNotes() == null ? null : NotesCommand.fromNotes(recipe.getNotes());
         RecipeCommand recipeCommand = new RecipeCommand(recipe.getId(), recipe.getDescription()
                 , recipe.getPrepTime(), recipe.getCookTime(), recipe.getServings(), recipe.getSource()
-                , recipe.getUrl(), recipe.getDirection(), recipe.getImage(),
-                (recipe.getNotes() == null ? null : NotesCommand.fromNotes(recipe.getNotes()))
+                , recipe.getUrl(), recipe.getDirection(), recipe.getImage(), notesCommand
                 , ingredientsList, recipe.getDifficulty(), categoriesList);
         return recipeCommand;
     }
