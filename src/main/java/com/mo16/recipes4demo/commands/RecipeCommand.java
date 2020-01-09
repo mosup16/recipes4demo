@@ -44,12 +44,12 @@ public class RecipeCommand {
     }
 
     public void addIngredient(IngredientCommand ingredient) {
-        ingredient.setRecipe(this);
+//        ingredient.setRecipe(this);
         getIngredients().add(ingredient);
     }
 
     public void addCategory(CategoryCommand category) {
-        category.getRecipes().add(this);
+//        category.getRecipes().add(this);
         getCategories().add(category);
     }
 

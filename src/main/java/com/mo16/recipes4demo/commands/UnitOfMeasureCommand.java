@@ -18,6 +18,7 @@ public class UnitOfMeasureCommand {
     }
 
     public static UnitOfMeasureCommand fromUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
-        return null;
+        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand(unitOfMeasure.getId(), unitOfMeasure.getName());
+        return unitOfMeasureCommand;
     }
 }

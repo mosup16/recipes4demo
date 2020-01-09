@@ -16,23 +16,24 @@ public class IngredientCommand {
     private Long id;
     private String description;
     private BigDecimal amount;
-    private RecipeCommand recipe;
+    //    private RecipeCommand recipe;
     private UnitOfMeasureCommand unitOfMeasure;
 
     public Ingredient toIngredient() {
+        UnitOfMeasure unitOfMeasure = this.unitOfMeasure == null ? null : this.unitOfMeasure.toUnitOfMeasure();
         Ingredient ingredient = new Ingredient(id, description, amount,
-                (recipe == null ? null : recipe.toRecipe()), (unitOfMeasure == null ? null : unitOfMeasure.toUnitOfMeasure()));
+                /*(recipe == null ? null : recipe.toRecipe())*/ null, unitOfMeasure);
         return ingredient;
     }
 
     public static IngredientCommand fromIngredient(Ingredient ingredient) {
         Recipe recipe = ingredient.getRecipe();
         UnitOfMeasure unitOfMeasure = ingredient.getUnitOfMeasure();
-        RecipeCommand recipeCommand = recipe == null ? null : RecipeCommand.fromRecipe(recipe);
+//        RecipeCommand recipeCommand = recipe == null ? null : RecipeCommand.fromRecipe(recipe);
         UnitOfMeasureCommand unitOfMeasureCommand = unitOfMeasure == null ? null : UnitOfMeasureCommand.fromUnitOfMeasure(unitOfMeasure);
 
         IngredientCommand ingredientCommand = new IngredientCommand(ingredient.getId()
-                , ingredient.getDescription(), ingredient.getAmount(), recipeCommand,unitOfMeasureCommand);
+                , ingredient.getDescription(), ingredient.getAmount(), unitOfMeasureCommand);
         return ingredientCommand;
     }
 }

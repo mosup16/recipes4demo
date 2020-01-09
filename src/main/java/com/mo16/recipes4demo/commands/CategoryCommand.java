@@ -2,11 +2,7 @@ package com.mo16.recipes4demo.commands;
 
 
 import com.mo16.recipes4demo.model.Category;
-import com.mo16.recipes4demo.model.Recipe;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,31 +12,31 @@ import java.util.List;
 public class CategoryCommand {
     private Long id;
     private String description;
-    private List<RecipeCommand> recipes;
+//    private List<RecipeCommand> recipes;
 
-    public List<RecipeCommand> getRecipes() {
-        if (recipes == null) recipes = new ArrayList<>();
-        return recipes;
-    }
+//    public List<RecipeCommand> getRecipes() {
+//        if (recipes == null) recipes = new ArrayList<>();
+//        return recipes;
+//    }
 
-    public void addRecipe(RecipeCommand recipe){
-        recipe.getCategories().add(this);
-        getRecipes().add(recipe);
-    }
+//    public void addRecipe(RecipeCommand recipe){
+//        recipe.getCategories().add(this);
+//        getRecipes().add(recipe);
+//    }
 
     public Category toCategory() {
-        List<Recipe> recipesList = new ArrayList<>();
-        recipes.forEach(recipeCommand -> recipesList.add(recipeCommand.toRecipe()));
+//        List<Recipe> recipesList = new ArrayList<>();
+//        recipes.forEach(recipeCommand -> recipesList.add(recipeCommand.toRecipe()));
 
-        Category category = new Category(id ,description ,recipesList);
+        Category category = new Category(id, description, null);
         return category;
     }
 
     public static CategoryCommand fromCategory(Category category) {
-        List<RecipeCommand> recipesCommandList = new ArrayList<>();
-        category.getRecipes().forEach(recipeCommand -> recipesCommandList.add(RecipeCommand.fromRecipe(recipeCommand)));
+//        List<RecipeCommand> recipesCommandList = new ArrayList<>();
+//        category.getRecipes().forEach(recipeCommand -> recipesCommandList.add(RecipeCommand.fromRecipe(recipeCommand)));
 
-        CategoryCommand categoryCommand = new CategoryCommand(category.getId() ,category.getDescription() ,recipesCommandList);
+        CategoryCommand categoryCommand = new CategoryCommand(category.getId(), category.getDescription());
         return categoryCommand;
     }
 }
