@@ -36,6 +36,18 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-1">
+                                    <a class="btn btn-default" href="#"
+                                       th:href="@{'~/recipes/' + ${recipe.id} + '/image'}" role="button">Change
+                                        Image</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <img src="../../static/images/guacamole400x400WithX.jpg"
+                                         th:src="@{'~/recipes/' + ${recipe.id} + '/recipeimage'}"
+                                         width="200" height="200">
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3 form-group">
                                     <label>Categories:</label>
                                 </div>
@@ -95,7 +107,9 @@
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
                                 <div class="col-md-1">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                    <a class="btn btn-default"
+                                       th:href="@{'~/recipes/'+ ${recipe.getId()} +'/ingredients'}"
+                                       role="button">Edit</a>
                                 </div>
                             </div>
                         </div>

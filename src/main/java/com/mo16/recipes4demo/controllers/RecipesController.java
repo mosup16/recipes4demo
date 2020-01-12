@@ -7,10 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 @Slf4j
@@ -26,39 +27,75 @@ public class RecipesController {
         this.recipeRepository = recipeRepository;
     }
 
-    @RequestMapping("/recipes/show/{id}")
-    public String recipeInfo(@PathVariable("id") Long id , Model model){
+    @GetMapping("/recipes/show/{id}")
+    public String recipeInfo(@PathVariable("id") Long id, Model model) {
         log.info("Getting recipe page for recipe with id = " + id);
-        model.addAttribute("recipe" , recipeRepository.findById(id).get());
+        model.addAttribute("recipe", recipeRepository.findById(id).get());
         return "recipes/show";
     }
 
-    @RequestMapping("recipes/new")
-    public String newRecipe(Model model){
-        model.addAttribute("recipe" ,new RecipeCommand());
+    @GetMapping("recipes/new")
+    public String newRecipe(Model model) {
+        model.addAttribute("recipe", new RecipeCommand());
         return "recipes/recipeform";
     }
 
-    @PostMapping
-    @RequestMapping("recipes")
-    public String submitSave(@ModelAttribute RecipeCommand recipeCommand){
+    @PostMapping("recipes")
+    public String submitSave(@ModelAttribute RecipeCommand recipeCommand) {
         Recipe savedRecipe = recipeRepository.save(recipeCommand.toRecipe());
         return "redirect:/recipes/show/" + savedRecipe.getId();
     }
 
-    @RequestMapping("/recipes/update/{id}")
-    public String UpdateRecipe(@PathVariable String id ,Model model){
-        Recipe recipe = recipeRepository.findById(Long.valueOf(id)).orElse(null);
+    @GetMapping("/recipes/update/{id}")
+    public String UpdateRecipe(@PathVariable Long id, Model model) {
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
         RecipeCommand recipeCommand = RecipeCommand.fromRecipe(recipe);
-        model.addAttribute("recipe" , recipeCommand);
+        model.addAttribute("recipe", recipeCommand);
         return "recipes/recipeform";
     }
 
 
-    @RequestMapping("/recipes/delete/{id}")
-    public String deleteRecipe(@PathVariable String id) {
-        recipeRepository.deleteById(Long.valueOf(id));
+    @GetMapping("/recipes/delete/{id}")
+    public String deleteRecipe(@PathVariable Long id) {
+        recipeRepository.deleteById(id);
         log.info("Delete recipe id = " + id);
         return "redirect:/";
+    }
+
+
+    @GetMapping("/recipes/{recipeId}/image")
+    public String imageForm(@PathVariable Long recipeId, Model model) {
+        model.addAttribute("recipe", recipeRepository.findById(recipeId).get());
+        return "recipes/imageuploadform";
+    }
+
+    @PostMapping("/recipes/{recipeId}/image")
+    public String saveImage(@PathVariable Long recipeId, @RequestParam("imagefile") MultipartFile file) throws IOException {
+        byte[] imageBytes = file.getBytes();
+        Byte[] image = new Byte[imageBytes.length];
+        int i = 0;
+        for (Byte b : imageBytes) {
+            image[i++] = b;
+        }
+        Recipe recipe = recipeRepository.findById(recipeId).get();
+        recipe.setImage(image);
+        Recipe save = recipeRepository.save(recipe);
+        return "redirect:/recipes/show/" + recipeId;
+    }
+
+    @GetMapping("/recipes/{recipeId}/recipeimage")
+    public void renderImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
+        Recipe recipe = recipeRepository.findById(recipeId).get();
+        response.setContentType("image");
+        Byte[] byteImage = recipe.getImage();
+        if (byteImage != null) {
+            byte[] image = new byte[byteImage.length];
+            int i = 0;
+            for (byte b : byteImage) {
+                image[i++] = b;
+            }
+            response.getOutputStream().write(image);
+            response.flushBuffer();
+        }
     }
 }

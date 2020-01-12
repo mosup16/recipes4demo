@@ -13,12 +13,13 @@ import java.math.BigDecimal;
 @Builder
 public class IngredientCommand {
     private Long id;
+    private Long recipeId;
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasureCommand unitOfMeasure;
+    private UnitOfMeasure unitOfMeasure;
 
     public Ingredient toIngredient() {
-        UnitOfMeasure unitOfMeasure = this.unitOfMeasure == null ? null : this.unitOfMeasure.toUnitOfMeasure();
+//        UnitOfMeasure unitOfMeasure = this.unitOfMeasure == null ? null : this.unitOfMeasure.toUnitOfMeasure();
         Ingredient ingredient = new Ingredient(id, description, amount,
                 null, unitOfMeasure);
         return ingredient;
@@ -27,10 +28,10 @@ public class IngredientCommand {
     public static IngredientCommand fromIngredient(Ingredient ingredient) {
         if (ingredient == null) return null;
         UnitOfMeasure unitOfMeasure = ingredient.getUnitOfMeasure();
-        UnitOfMeasureCommand unitOfMeasureCommand = unitOfMeasure == null ? null : UnitOfMeasureCommand.fromUnitOfMeasure(unitOfMeasure);
+//        UnitOfMeasureCommand unitOfMeasureCommand = unitOfMeasure == null ? null : UnitOfMeasureCommand.fromUnitOfMeasure(unitOfMeasure);
 
         IngredientCommand ingredientCommand = new IngredientCommand(ingredient.getId()
-                , ingredient.getDescription(), ingredient.getAmount(), unitOfMeasureCommand);
+                , ingredient.getRecipe().getId(), ingredient.getDescription(), ingredient.getAmount(), unitOfMeasure);
         return ingredientCommand;
     }
 }
