@@ -1,17 +1,22 @@
 package com.mo16.recipes4demo.controllers;
 
 import com.mo16.recipes4demo.commands.RecipeCommand;
+import com.mo16.recipes4demo.exceptions.NotFoundException;
 import com.mo16.recipes4demo.model.Recipe;
 import com.mo16.recipes4demo.repositoris.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Optional;
 
 
 @Slf4j
@@ -30,7 +35,7 @@ public class RecipesController {
     @GetMapping("/recipes/show/{id}")
     public String recipeInfo(@PathVariable("id") Long id, Model model) {
         log.info("Getting recipe page for recipe with id = " + id);
-        model.addAttribute("recipe", recipeRepository.findById(id).get());
+        model.addAttribute("recipe", findRecipeById(id));
         return "recipes/show";
     }
 
@@ -41,14 +46,18 @@ public class RecipesController {
     }
 
     @PostMapping("recipes")
-    public String submitSave(@ModelAttribute RecipeCommand recipeCommand) {
+    public String submitSave(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldErrors().forEach(error -> log.error(error.getField() + " : " + error.getDefaultMessage()));
+            return "recipes/recipeform";
+        }
         Recipe savedRecipe = recipeRepository.save(recipeCommand.toRecipe());
         return "redirect:/recipes/show/" + savedRecipe.getId();
     }
 
     @GetMapping("/recipes/update/{id}")
     public String UpdateRecipe(@PathVariable Long id, Model model) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        Recipe recipe = findRecipeById(id);
         RecipeCommand recipeCommand = RecipeCommand.fromRecipe(recipe);
         model.addAttribute("recipe", recipeCommand);
         return "recipes/recipeform";
@@ -65,7 +74,7 @@ public class RecipesController {
 
     @GetMapping("/recipes/{recipeId}/image")
     public String imageForm(@PathVariable Long recipeId, Model model) {
-        model.addAttribute("recipe", recipeRepository.findById(recipeId).get());
+        model.addAttribute("recipe", findRecipeById(recipeId));
         return "recipes/imageuploadform";
     }
 
@@ -77,7 +86,8 @@ public class RecipesController {
         for (Byte b : imageBytes) {
             image[i++] = b;
         }
-        Recipe recipe = recipeRepository.findById(recipeId).get();
+        Recipe recipe = findRecipeById(recipeId);
+        ;
         recipe.setImage(image);
         Recipe save = recipeRepository.save(recipe);
         return "redirect:/recipes/show/" + recipeId;
@@ -85,7 +95,7 @@ public class RecipesController {
 
     @GetMapping("/recipes/{recipeId}/recipeimage")
     public void renderImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
-        Recipe recipe = recipeRepository.findById(recipeId).get();
+        Recipe recipe = findRecipeById(recipeId);
         response.setContentType("image");
         Byte[] byteImage = recipe.getImage();
         if (byteImage != null) {
@@ -97,5 +107,20 @@ public class RecipesController {
             response.getOutputStream().write(image);
             response.flushBuffer();
         }
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public String notFoundErrorHandler(Exception e, Model model) {
+        model.addAttribute("exception", e);
+        log.error("notFoundError : " + e.getMessage());
+        return "404error";
+    }
+
+    private Recipe findRecipeById(Long recipeId) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        if (!recipeOptional.isPresent())
+            throw new NotFoundException("Could not find Recipe with the following id = " + recipeId);
+        return recipeOptional.get();
     }
 }

@@ -5,7 +5,12 @@ import com.mo16.recipes4demo.model.Ingredient;
 import com.mo16.recipes4demo.model.Recipe;
 import com.mo16.recipes4demo.model.enums.Difficulty;
 import lombok.*;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +20,27 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RecipeCommand {
+
     private Long id;
+
+    @NotBlank
+    @Size(min = 3, max = 255)
     private String description;
+
+    @Min(1)
+    @Max(999)
     private Long prepTime;
+
+    @Min(1)
+    @Max(999)
     private Long cookTime;
     private Long servings;
     private String source;
+
+    @URL
     private String url;
+
+    @NotBlank
     private String direction;
     private Byte[] image;
     private NotesCommand notes;
