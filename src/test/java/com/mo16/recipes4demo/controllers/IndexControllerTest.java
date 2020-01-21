@@ -48,8 +48,8 @@ class IndexControllerTest {
     @Test
     void index() {
         List<Recipe> recipes = new ArrayList<>();
-        Recipe recipe_1 = Recipe.builder().id("1").build();
-        Recipe recipe_2 = Recipe.builder().id("2").build();
+        Recipe recipe_1 = Recipe.builder().id(1L).build();
+        Recipe recipe_2 = Recipe.builder().id(2L).build();
 
         recipes.add(recipe_1);
         recipes.add(recipe_2);

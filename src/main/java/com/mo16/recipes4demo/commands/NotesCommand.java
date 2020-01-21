@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class NotesCommand {
-    private String id;
+    private Long id;
     private String recipeNotes;
 
     public Notes toNotes() {

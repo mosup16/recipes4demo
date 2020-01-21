@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 public class RecipeCommand {
 
-    private String id;
+    private Long id;
 
     @NotBlank
     @Size(min = 3, max = 255)

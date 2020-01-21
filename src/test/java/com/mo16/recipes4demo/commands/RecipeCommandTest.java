@@ -16,7 +16,7 @@ class RecipeCommandTest {
 
     @Test
     void toRecipe() {
-        String id = "1";
+        Long id = 1L;
         IngredientCommand ingredientCommand1 = IngredientCommand.builder().id(id).build();
         List<IngredientCommand> ingredientCommands = new ArrayList<>();
         ingredientCommands.add(ingredientCommand1);
@@ -33,7 +33,7 @@ class RecipeCommandTest {
 
     @Test
     void fromRecipe(){
-        String id = "1";
+        Long id = 1L;
         Ingredient ingredient1 = Ingredient.builder().id(id).build();
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient1);

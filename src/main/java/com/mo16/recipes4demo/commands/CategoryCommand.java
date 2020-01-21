@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CategoryCommand {
-    private String id;
+    private Long id;
     private String description;
 
     public Category toCategory() {

@@ -5,37 +5,39 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-//import javax.persistence.*;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
+@Entity
 public class Recipe {
-
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String description;
     private Long prepTime;
     private Long cookTime;
     private Long servings;
     private String source;
     private String url;
+    @Lob
     private String direction;
+    @Lob
     private Byte[] image;
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
-    private List<Ingredient> ingredients;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private List<Ingredient> ingredients = new ArrayList<>();
+    @Enumerated(value = EnumType.STRING)
     private Difficulty difficulty;
-    @DBRef
+    @ManyToMany
+    @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
     public List<Ingredient> getIngredients() {
@@ -49,12 +51,12 @@ public class Recipe {
     }
 
     public void addIngredient(Ingredient ingredient) {
-//        ingredient.setRecipe(this);
+        ingredient.setRecipe(this);
         getIngredients().add(ingredient);
     }
 
     public void addCategory(Category category) {
-//        category.getRecipes().add(this);
+        category.getRecipes().add(this);
         getCategories().add(category);
     }
 }

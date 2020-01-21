@@ -32,21 +32,21 @@ public class IngredientController implements Serializable {
     }
 
     @GetMapping("recipes/{recipeId}/ingredients")
-    public String IngredientList(@PathVariable String recipeId, Model model) {
+    public String IngredientList(@PathVariable Long recipeId, Model model) {
         model.addAttribute("recipe", recipeRepository.findById(recipeId).orElse(null));
         log.info("get list off ingredients for recipe id = " + recipeId);
         return "recipes/Ingredients/list";
     }
 
     @GetMapping("recipes/{recipeId}/ingredients/show/{ingredientId}")
-    public String showIngredient(@PathVariable String ingredientId, @PathVariable String recipeId, Model model) {
+    public String showIngredient(@PathVariable Long ingredientId, @PathVariable Long recipeId, Model model) {
         Ingredient ingredient1 = ingredientRepository.findByIngredientIdAndRecipeId(ingredientId, recipeId).orElse(null);
         model.addAttribute("ingredient", ingredient1);
         return "recipes/ingredients/show";
     }
 
     @GetMapping("recipes/{recipeId}/ingredients/update/{ingredientId}")
-    public String updateIngredient(@PathVariable String ingredientId, @PathVariable String recipeId, Model model) {
+    public String updateIngredient(@PathVariable Long ingredientId, @PathVariable Long recipeId, Model model) {
         Ingredient ingredient1 = ingredientRepository.findByIngredientIdAndRecipeId(ingredientId, recipeId).orElse(null);
         model.addAttribute("ingredient", IngredientCommand.fromIngredient(ingredient1));
         model.addAttribute("uomList", unitOfMeasureRepository.findAll());
@@ -54,13 +54,13 @@ public class IngredientController implements Serializable {
     }
 
     @GetMapping("recipes/{recipeId}/ingredients/delete/{ingredientId}")
-    public String deleteIngredient(@PathVariable String ingredientId, @PathVariable String recipeId) {
+    public String deleteIngredient(@PathVariable Long ingredientId, @PathVariable Long recipeId) {
         ingredientRepository.deleteByIngredientIdAndRecipeId(ingredientId, recipeId);
         return "redirect:/recipes/" + recipeId + "/ingredients/";
     }
 
     @GetMapping("/recipes/{recipeId}/ingredients/new")
-    public String newIngredient(@PathVariable("recipeId") String recipeId, Model model) {
+    public String newIngredient(@PathVariable("recipeId") Long recipeId, Model model) {
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setRecipeId(recipeId);
         model.addAttribute("ingredient", ingredientCommand);
@@ -69,7 +69,7 @@ public class IngredientController implements Serializable {
     }
 
     @PostMapping("recipes/{recipeId}/ingredients/")
-    public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand ingredientCommand) {
+    public String saveOrUpdate(@PathVariable Long recipeId, @ModelAttribute IngredientCommand ingredientCommand) {
         ingredientCommand.setRecipeId(recipeId);
         Ingredient ingredient = ingredientCommand.toIngredient();
         ingredient.setRecipe(recipeRepository.findById(recipeId).get());
