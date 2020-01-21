@@ -34,7 +34,6 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-      //  dropData();
         log.info("Loading BootStrap Data .........");
         loadData();
         log.info("Data has been loaded successfully");
