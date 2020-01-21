@@ -16,8 +16,8 @@ class BIRelationsITTest {
 
     @Test
     void BITest() {
-        Recipe recipe = Recipe.builder().id(1L).build();
-        Category category = Category.builder().id(1L).build();
+        Recipe recipe = Recipe.builder().id("1").build();
+        Category category = Category.builder().id("1").build();
         recipe.addCategory(category);
         category.addRecipe(recipe);
         assert category.getRecipes().size() == 2;

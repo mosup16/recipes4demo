@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RecipeCommandTest {
 
     @BeforeEach
@@ -18,7 +16,7 @@ class RecipeCommandTest {
 
     @Test
     void toRecipe() {
-        Long id = 1L;
+        String id = "1";
         IngredientCommand ingredientCommand1 = IngredientCommand.builder().id(id).build();
         List<IngredientCommand> ingredientCommands = new ArrayList<>();
         ingredientCommands.add(ingredientCommand1);
@@ -35,7 +33,7 @@ class RecipeCommandTest {
 
     @Test
     void fromRecipe(){
-        Long id = 1L;
+        String id = "1";
         Ingredient ingredient1 = Ingredient.builder().id(id).build();
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient1);

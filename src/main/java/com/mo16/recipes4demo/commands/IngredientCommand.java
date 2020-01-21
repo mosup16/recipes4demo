@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class IngredientCommand {
-    private Long id;
-    private Long recipeId;
+    private String id;
+    private String recipeId;
     private String description;
     private BigDecimal amount;
     private UnitOfMeasure unitOfMeasure;
@@ -30,8 +30,9 @@ public class IngredientCommand {
         UnitOfMeasure unitOfMeasure = ingredient.getUnitOfMeasure();
 //        UnitOfMeasureCommand unitOfMeasureCommand = unitOfMeasure == null ? null : UnitOfMeasureCommand.fromUnitOfMeasure(unitOfMeasure);
 
+        String recipeId = ingredient.getRecipe() == null ? null : ingredient.getRecipe().getId();
         IngredientCommand ingredientCommand = new IngredientCommand(ingredient.getId()
-                , ingredient.getRecipe().getId(), ingredient.getDescription(), ingredient.getAmount(), unitOfMeasure);
+                , recipeId, ingredient.getDescription(), ingredient.getAmount(), unitOfMeasure);
         return ingredientCommand;
     }
 }

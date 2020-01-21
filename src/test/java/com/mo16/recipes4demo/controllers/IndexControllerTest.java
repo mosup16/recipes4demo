@@ -8,18 +8,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -50,8 +48,8 @@ class IndexControllerTest {
     @Test
     void index() {
         List<Recipe> recipes = new ArrayList<>();
-        Recipe recipe_1 = Recipe.builder().id(1L).build();
-        Recipe recipe_2 = Recipe.builder().id(2L).build();
+        Recipe recipe_1 = Recipe.builder().id("1").build();
+        Recipe recipe_2 = Recipe.builder().id("2").build();
 
         recipes.add(recipe_1);
         recipes.add(recipe_2);

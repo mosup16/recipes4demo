@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 class CategoryTest {
 
@@ -19,9 +17,9 @@ class CategoryTest {
 
     @Test
     void getId() {
-        long id = 22L;
+        String id = "22";
         category.setId(id);
-        assert category.getId() == id;
+        assert id.equals(category.getId());
     }
 
     @Test

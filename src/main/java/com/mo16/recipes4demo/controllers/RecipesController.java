@@ -33,7 +33,7 @@ public class RecipesController {
     }
 
     @GetMapping("/recipes/show/{id}")
-    public String recipeInfo(@PathVariable("id") Long id, Model model) {
+    public String recipeInfo(@PathVariable("id") String id, Model model) {
         log.info("Getting recipe page for recipe with id = " + id);
         model.addAttribute("recipe", findRecipeById(id));
         return "recipes/show";
@@ -56,7 +56,7 @@ public class RecipesController {
     }
 
     @GetMapping("/recipes/update/{id}")
-    public String UpdateRecipe(@PathVariable Long id, Model model) {
+    public String UpdateRecipe(@PathVariable String id, Model model) {
         Recipe recipe = findRecipeById(id);
         RecipeCommand recipeCommand = RecipeCommand.fromRecipe(recipe);
         model.addAttribute("recipe", recipeCommand);
@@ -65,7 +65,7 @@ public class RecipesController {
 
 
     @GetMapping("/recipes/delete/{id}")
-    public String deleteRecipe(@PathVariable Long id) {
+    public String deleteRecipe(@PathVariable String id) {
         recipeRepository.deleteById(id);
         log.info("Delete recipe id = " + id);
         return "redirect:/";
@@ -73,13 +73,13 @@ public class RecipesController {
 
 
     @GetMapping("/recipes/{recipeId}/image")
-    public String imageForm(@PathVariable Long recipeId, Model model) {
+    public String imageForm(@PathVariable String recipeId, Model model) {
         model.addAttribute("recipe", findRecipeById(recipeId));
         return "recipes/imageuploadform";
     }
 
     @PostMapping("/recipes/{recipeId}/image")
-    public String saveImage(@PathVariable Long recipeId, @RequestParam("imagefile") MultipartFile file) throws IOException {
+    public String saveImage(@PathVariable String recipeId, @RequestParam("imagefile") MultipartFile file) throws IOException {
         byte[] imageBytes = file.getBytes();
         Byte[] image = new Byte[imageBytes.length];
         int i = 0;
@@ -94,7 +94,7 @@ public class RecipesController {
     }
 
     @GetMapping("/recipes/{recipeId}/recipeimage")
-    public void renderImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
+    public void renderImage(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
         Recipe recipe = findRecipeById(recipeId);
         response.setContentType("image");
         Byte[] byteImage = recipe.getImage();
@@ -117,7 +117,7 @@ public class RecipesController {
         return "404error";
     }
 
-    private Recipe findRecipeById(Long recipeId) {
+    private Recipe findRecipeById(String recipeId) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
         if (!recipeOptional.isPresent())
             throw new NotFoundException("Could not find Recipe with the following id = " + recipeId);
